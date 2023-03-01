@@ -78,5 +78,46 @@ service APIListaDeTarefas {
 ````
 
 Quando se inicia um novo serviço de GRPC, trata-se da comunicação entre duas partes (servidor e cliente).Durante a inicialização, é necessário passar o caminho desse arquivo protobuf para o GRPC que por sua vez vai ler o arquivo, fazer um "parsing", ou seja, decodificar o arquivo para poder entender de dentro e trazer a definição da API como um objeto que pode ser lido pelo motor de execução dele. 
+```
+//javascript, grpc tem uma biblioteca proprio
+const grpc = require('grpc')
+const path = require('path')
+const DefinicaoTarefas = grpc.load(path.resolve('./tarefas.proto'))
+```
+
+o GRPC leva como parâmetro um objeto que vai ter uma lista das implementações reais de cada ação que foi definida no arquivo protobuf. Então é necessário ter que ter três funções, uma para listar, marcar como concluído, adicionar tarefa.
+
+```
+const grpc = require('grpc')
+const path = require('path')
+const DefinicaoTarefas = grpc.load(path.resolve('./tarefas.proto'))
+
+const server = new grpc.Server()
+server.addService(
+  DefinicaoTarefas.APIListaDeTarefas.service,
+  { /* implementação */ }
+}
+```
+Listar todas as tarefas: 
+Cria-se uma lista de tarefas que já vai ter uma tarefa dentro, assim cria-se uma função com o mesmo nome
+do RPC no arquivo protobuf, a função de GRPC leva dois parâmetros, sendo o primeiro requisição feita pelo cliente, por meio dela vai buscar todos os parâmetros que foram passados para o servidor, nesse caso o parâmetro é vazio. O segundo parâmetro é um callback que vai responder para o cliente quando for chamado, o callback também uma função, e o primeiro parâmetro dela é a mensagem de erro se passar alguma coisa que não seja nula, o GRPC vai retornar um erro para o cliente. já o segundo parâmetro é odado que vamos retornar que precisa ser do mesmo tipo que foi definido lá no arquivo protobuf. Depois é só adicionar 
+adicionar essa função no objeto de implementação GRPC, fazendo o mesmo para as outras duas funções.
+
+```
+const tarefas = [
+  {
+    id:1,
+    descricao: 'Lavar a louça'
+    data: '12/03/2022'
+    responsavel: 'Gabriel',
+    feita: false
+   }
+]
+function ListaTodas(requisicao, callback) {
+  return callback(null, tarefas)
+}
+````
+Adicionando a  função no objeto de implentação no GRPC, fazendo o mesmo para as duas outras.
+
 
 

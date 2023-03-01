@@ -18,7 +18,7 @@ Os grafos de propriedades são usados para modelar relacionamentos entre dados e
 <h3>GRPC</h3>
 Para enviar esses dados via HTTP teria que gastar espaço com caracteres desnecessários, como colchetes e chaves.
 
-´´´
+````
 const tatefa = {
   id:1,
   descricao: 'Lavar a louça'
@@ -28,8 +28,9 @@ const tatefa = {
   
 }
 const listaDeTarefas = [tarefas]
-```
-```
+````
+
+````
 syntax "proto3"
 
 message Tarefa {
@@ -43,7 +44,7 @@ message Tarefa {
 message ListaDeTarefas {
   repeated Tarefa lista = 1;
  }
- ```
+ ````
  
 No protobuf por outro lado, chama-se cada tipo de dado de mensagem, e essa mesma lista seria definida rápidamente. Os números do lado direito são índices da mensagem, eles existem para dizer qual campo é o que
 quando a mensagem for enviada, assim isso elimina a necessidade de codificar caracteres desnecessário, considerando-se que pode passar só um número para dizer qual é o próximo campo e o tipo desse campo. 

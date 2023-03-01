@@ -76,3 +76,7 @@ service APIListaDeTarefas {
   rpc MarcarComoConcluida (TarefaID) returns (Tarefa);
 }
 ````
+
+Quando se inicia um novo serviço de GRPC, trata-se da comunicação entre duas partes (servidor e cliente).Durante a inicialização, é necessário passar o caminho desse arquivo protobuf para o GRPC que por sua vez vai ler o arquivo, fazer um "parsing", ou seja, decodificar o arquivo para poder entender de dentro e trazer a definição da API como um objeto que pode ser lido pelo motor de execução dele. 
+
+

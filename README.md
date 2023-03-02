@@ -144,3 +144,26 @@ server.addService(
 }
 ```
 
+Marcar como concluida:
+
+````
+function MarcarComoConcluida (requisicao, callback) {
+  const {indice, tarefaConcluida} = tarefas.find((tarefa, indice) => {
+    if(tarefa.id === requisicao.request.id) {
+      return {
+        indice,
+        tarefa
+       }
+      }
+    })
+    if (!tarefaConcluida) {
+      return callback(new Error('A tarefa não existe'), null)
+     }
+     
+     tarefaConcluida.feito = true
+     tarefas[indice] = tarefaConcluida
+     return callback(null, tarefaConcluida)
+    }
+    
+````
+

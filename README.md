@@ -119,5 +119,28 @@ function ListaTodas(requisicao, callback) {
 ````
 Adicionando a  função no objeto de implentação no GRPC, fazendo o mesmo para as duas outras.
 
+```
+const grpc = require('grpc')
+const path = require('path')
+const DefinicaoTarefas = grpc.load(path.resolve('./tarefas.proto'))
 
+const tarefas = [
+  {
+    id:1,
+    descricao: 'Lavar a louça'
+    data: '12/03/2022'
+    responsavel: 'Gabriel',
+    feita: false
+   }
+]
+
+function ListaTodas(requisicao, callback) {
+  return callback(null, tarefas)
+}
+const server = new grpc.Server()
+server.addService(
+  DefinicaoTarefas.APIListaDeTarefas.service,
+  { ListarTodas }
+}
+```
 

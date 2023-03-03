@@ -221,15 +221,7 @@ const client = new DefinicaoTarefas.APIListaDeTarefas(
   'localhost:50051',
   grpc.credentials.creatInsecure()
 )
-)
-const tarefas = [
-  {
-    id:1,
-    descricao: 'Lavar a louça'
-    data: '12/03/2022'
-    responsavel: 'Gabriel',
-    feita: false
-   }
+client.list
 ]
 
 function ListarTodas(requisicao, callback) {

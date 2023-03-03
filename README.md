@@ -39,6 +39,8 @@ Protocol Buffer:
 
 - É uma linguagem e plataforma neutra, onde tem processos de extensão (independente da plataforma, consegue enviar dados de um lado para outro, envio e recebimento de dados). 
 
+![alt text](https://github.com/Jennyads/Database_architecture_in_graphs_and_GRPC/tree/master/Imagens)
+
 Protocol Buffer vs JSON:
 
 - Arquivos binários (arquivo reduzido para falar na linguagem de máquina) > JSON (arquivo no formato humano, consegue olhar e ler).

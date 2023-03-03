@@ -16,6 +16,42 @@ Os grafos de propriedades são usados para modelar relacionamentos entre dados e
 
 
 <h3>GRPC</h3>
+É um framework desenvolvido pelo google que tem o objetivo facilitar o processo de comunicação entre sistemas de uma forma extremamente rápida, leve, independente de linguagem. 
+
+Casos de uso:
+
+- ideal para microserviços;
+- mobile, browsers backend;
+- geração das bibliotecas de forma automática;
+- streaming bidirecional utilizando HTTP/2 (cliente pode mandar pacote "steaming de dados" para o servidor,da mesma forma que o servidor pode fazer isso numa única conexão);
+
+
+Linguagens (suporte oficial):
+
+- gRPC-GO
+- gRPC-JAVA
+- gRPC-c
+
+RPC - Remote Procedure Call:
+Servidor tem uma função, assim o cliente chama um servidor (cria um processo no client dele, onde consegue estabelecer um conexão com o servidor) e executa essa função no server. Assim, faz-se uma request que onde pode-se trabalhar. 
+
+Protocol Buffer:
+
+- É uma linguagem e plataforma neutra, onde tem processos de extensão (independente da plataforma, consegue enviar dados de um lado para outro, envio e recebimento de dados). 
+
+Protocol Buffer vs JSON:
+
+- Arquivos binários (arquivo reduzido para falar na linguagem de máquina) > JSON (arquivo no formato humano, consegue olhar e ler).
+- Processo de serialização é mais leve (CPU) do que JSON;
+- Gasta menos recursos de rede;
+
+
+
+
+
+
+
+
 Para enviar esses dados via HTTP teria que gastar espaço com caracteres desnecessários, como colchetes e chaves.
 
 ````

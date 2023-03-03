@@ -113,7 +113,7 @@ const tarefas = [
     feita: false
    }
 ]
-function ListaTodas(requisicao, callback) {
+function ListarTodas(requisicao, callback) {
   return callback(null, tarefas)
 }
 ````
@@ -134,19 +134,23 @@ const tarefas = [
    }
 ]
 
-function ListaTodas(requisicao, callback) {
+function ListarTodas(requisicao, callback) {
   return callback(null, tarefas)
 }
-const server = new grpc.Server()
-server.addService(
-  DefinicaoTarefas.APIListaDeTarefas.service,
-  { ListarTodas }
+
+function AdicionarTarefa(requisicao, callback) {
+  const {id, data, descricao, responsavel} = requisicao.request
+  tarefas.push({
+    id,
+    data,
+    descricao,
+    responsavel,
+    feito: false
+   })
+   return callback(null, tarefas.at(-1))
+
 }
-```
 
-Marcar como concluida:
-
-````
 function MarcarComoConcluida (requisicao, callback) {
   const {indice, tarefaConcluida} = tarefas.find((tarefa, indice) => {
     if(tarefa.id === requisicao.request.id) {
@@ -156,6 +160,7 @@ function MarcarComoConcluida (requisicao, callback) {
        }
       }
     })
+    
     if (!tarefaConcluida) {
       return callback(new Error('A tarefa não existe'), null)
      }
@@ -165,5 +170,10 @@ function MarcarComoConcluida (requisicao, callback) {
      return callback(null, tarefaConcluida)
     }
     
+const server = new grpc.Server()
+server.addService(
+  DefinicaoTarefas.APIListaDeTarefas.service,
+  { ListarTodas, AdicionarTarefa, MarcarComoConcluida}
+)   
 ````
 

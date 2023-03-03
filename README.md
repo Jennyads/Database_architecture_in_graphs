@@ -221,50 +221,29 @@ const client = new DefinicaoTarefas.APIListaDeTarefas(
   'localhost:50051',
   grpc.credentials.creatInsecure()
 )
-client.list
-]
+client.listarTodas({}, (err, tarefas) => {
+  if(err) trrow err
+  console.log(tarefas)
+})
 
-function ListarTodas(requisicao, callback) {
-  return callback(null, tarefas)
+const novaTarefa = {
+  id: 2,
+  descricao: 'Passear com o cachorro',
+  data: '02/03/2022',
+  responsavel: 'Vanessa',
+  feito: false
 }
 
-function AdicionarTarefa(requisicao, callback) {
-  const {id, data, descricao, responsavel} = requisicao.request
-  tarefas.push({
-    id,
-    data,
-    descricao,
-    responsavel,
-    feito: false
-   })
-   return callback(null, tarefas.at(-1))
-
+client.adicionarTarefa(novaTarefa, (err, tarefa) => {
+  if(err) throw err
+  console.log(tarefa)
 }
 
-function MarcarComoConcluida (requisicao, callback) {
-  const {indice, tarefaConcluida} = tarefas.find((tarefa, indice) => {
-    if(tarefa.id === requisicao.request.id) {
-      return {
-        indice,
-        tarefa
-       }
-      }
-    })
+client.marcarComoConcluido({id:2}), (err, tarefa) => { 
+  if(err) throw err
+  console.log(tarefa)
+})
     
-    if (!tarefaConcluida) {
-      return callback(new Error('A tarefa não existe'), null)
-     }
-     
-     tarefaConcluida.feito = true
-     tarefas[indice] = tarefaConcluida
-     return callback(null, tarefaConcluida)
-    }
-    
-const server = new grpc.Server()
-server.addService(
-  DefinicaoTarefas.APIListaDeTarefas.service,
-  { ListarTodas, AdicionarTarefa, MarcarComoConcluida}
-)   
 ````
 
 

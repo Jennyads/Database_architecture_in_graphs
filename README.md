@@ -117,7 +117,7 @@ function ListarTodas(requisicao, callback) {
   return callback(null, tarefas)
 }
 ````
-Adicionando a  função no objeto de implentação no GRPC, fazendo o mesmo para as duas outras.
+Adicionando a  função no objeto de implentação no GRPC, fazendo o mesmo para as duas outras. Assim, fica tudo junto em um objeto só de implementação!
 
 ```
 const grpc = require('grpc')
@@ -176,4 +176,104 @@ server.addService(
   { ListarTodas, AdicionarTarefa, MarcarComoConcluida}
 )   
 ````
+
+Finalizando o lado do servidor:
+Escolheu-se uma porta para poder ouvir a comunicação, com HTTP/2 é brigado a ter um certificado digital, para testes locais ele dá um certificado de "mentira" como: grpc.ServerCredentials.createInsecure.
+
+````
+const grpc = require('grpc')
+const path = require('path')
+const DefinicaoTarefas = grpc.load(path.resolve('./tarefas.proto'))
+
+const tarefas = [...
+]
+
+function ListarTodas(requisicao, callback) {...
+}
+
+function AdicionarTarefa(requisicao, callback) {...
+}
+
+function MarcarComoConcluida (requisicao, callback) {...
+}
+    
+const server = new grpc.Server()
+server.addService(
+  DefinicaoTarefas.APIListaDeTarefas.service,
+  { ListarTodas, AdicionarTarefa, MarcarComoConcluida}
+) 
+
+server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure())
+server.start()
+
+````
+Vatangens GRPC: O cliente pode se comunicar com o servidor sem saber nenhum detalhe de rede do ambiente ou do próprio servidor. 
+O GRPC abstrai todas as chamadas de rede, a chamada de um cliente para um servidor é exatamente igual a uma chamada de uma função local, como se tivesse um objeto dentro do próprio código.
+
+Passando o endereço do servidor e das credenciais, pode-se chamar cada uma das funções do servidor, como se fossem métodos do cliente.
+
+```
+const grpc = require('grpc')
+const path = require('path')
+const DefinicaoTarefas = grpc.load(path.resolve('./tarefas.proto'))
+
+const client = new DefinicaoTarefas.APIListaDeTarefas(
+  'localhost:50051',
+  grpc.credentials.creatInsecure()
+)
+)
+const tarefas = [
+  {
+    id:1,
+    descricao: 'Lavar a louça'
+    data: '12/03/2022'
+    responsavel: 'Gabriel',
+    feita: false
+   }
+]
+
+function ListarTodas(requisicao, callback) {
+  return callback(null, tarefas)
+}
+
+function AdicionarTarefa(requisicao, callback) {
+  const {id, data, descricao, responsavel} = requisicao.request
+  tarefas.push({
+    id,
+    data,
+    descricao,
+    responsavel,
+    feito: false
+   })
+   return callback(null, tarefas.at(-1))
+
+}
+
+function MarcarComoConcluida (requisicao, callback) {
+  const {indice, tarefaConcluida} = tarefas.find((tarefa, indice) => {
+    if(tarefa.id === requisicao.request.id) {
+      return {
+        indice,
+        tarefa
+       }
+      }
+    })
+    
+    if (!tarefaConcluida) {
+      return callback(new Error('A tarefa não existe'), null)
+     }
+     
+     tarefaConcluida.feito = true
+     tarefas[indice] = tarefaConcluida
+     return callback(null, tarefaConcluida)
+    }
+    
+const server = new grpc.Server()
+server.addService(
+  DefinicaoTarefas.APIListaDeTarefas.service,
+  { ListarTodas, AdicionarTarefa, MarcarComoConcluida}
+)   
+````
+
+
 
